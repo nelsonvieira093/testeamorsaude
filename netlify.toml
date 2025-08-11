@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build]
+  publish = "dist/amorsaude-frontend"
+  command = "npm run build -- --configuration production"
+
+[build.environment]
+  NODE_VERSION = "18" # Ou a versão usada no seu projeto

@@ -1,0 +1,111 @@
+<div class="card">
+  <div class="header-section">
+    <h1 class="title">Lista de Clínicas</h1>
+    <button (click)="addClinic()" class="btn btn-primary" aria-label="Adicionar Clínica">
+      Adicionar Clínica
+    </button>
+  </div>
+
+  <div class="form-field">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch(searchTerm)"
+      placeholder="Buscar clínicas..."
+      class="form-input"
+      aria-label="Buscar clínicas"
+    />
+  </div>
+
+  <!-- Loading Spinner -->
+  <app-loading *ngIf="isLoading"></app-loading>
+
+  <!-- Mensagem de lista vazia -->
+  <div *ngIf="!isLoading && filteredClinics.length === 0" class="empty-message">
+    Nenhuma clínica encontrada.
+  </div>
+
+  <!-- Tabela com clínicas -->
+  <div *ngIf="!isLoading && filteredClinics.length > 0" class="table-responsive">
+    <table class="data-table" role="grid" aria-label="Lista de Clínicas">
+      <thead>
+        <tr>
+          <th scope="col">Nome Fantasia</th>
+          <th scope="col">CNPJ</th>
+          <th scope="col">Região</th>
+          <th scope="col">Status</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let clinic of filteredClinics">
+          <td>{{ clinic.fantasyName }}</td>
+          <td>{{ clinic.cnpj | cnpj }}</td>
+          <td>{{ clinic.region }}</td>
+          <td>
+            <span [class]="clinic.active ? 'status-active' : 'status-inactive'">
+              {{ clinic.active ? 'Ativa' : 'Inativa' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button
+              (click)="viewClinic(clinic.id!)"
+              class="btn-action btn-view"
+              [attr.aria-label]="'Visualizar clínica ' + clinic.fantasyName"
+            >
+              Visualizar
+            </button>
+
+            <button
+              (click)="editClinic(clinic.id!)"
+              class="btn-action btn-edit"
+              [attr.aria-label]="'Editar clínica ' + clinic.fantasyName"
+            >
+              Editar
+            </button>
+
+            <button
+              (click)="deleteClinic(clinic.id!)"
+              class="btn-action btn-delete"
+              [attr.aria-label]="'Excluir clínica ' + clinic.fantasyName"
+            >
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginação simples -->
+  <div *ngIf="!isLoading && lastPage > 1" class="pagination" role="navigation" aria-label="Paginação da lista de clínicas">
+    <button 
+      (click)="goToPage(currentPage - 1)" 
+      [disabled]="currentPage === 1" 
+      aria-label="Página anterior"
+      class="btn-pagination"
+    >
+      &laquo; Anterior
+    </button>
+
+    <button
+      *ngFor="let page of [].constructor(lastPage); let i = index"
+      (click)="goToPage(i + 1)"
+      [class.active]="currentPage === i + 1"
+      [attr.aria-current]="currentPage === i + 1 ? 'page' : null"
+      class="btn-pagination"
+      [attr.aria-label]="'Ir para página ' + (i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+
+    <button 
+      (click)="goToPage(currentPage + 1)" 
+      [disabled]="currentPage === lastPage" 
+      aria-label="Próxima página"
+      class="btn-pagination"
+    >
+      Próximo &raquo;
+    </button>
+  </div>
+</div>

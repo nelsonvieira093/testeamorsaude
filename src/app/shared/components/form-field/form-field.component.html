@@ -1,0 +1,63 @@
+<!-- src/app/shared/components/form-field/form-field.component.html -->
+<div class="form-field" [class.invalid]="control.errors && control.touched">
+  <label *ngIf="label" [for]="fieldId" class="form-label">
+    {{ label }}
+    <span *ngIf="required" class="required-asterisk">*</span>
+  </label>
+
+  <div class="input-container">
+    <input
+      *ngIf="
+        type === 'text' ||
+        type === 'email' ||
+        type === 'password' ||
+        type === 'number'
+      "
+      [id]="fieldId"
+      [type]="type"
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [attr.aria-invalid]="control.invalid && control.touched"
+      class="form-input"
+    />
+
+    <textarea
+      *ngIf="type === 'textarea'"
+      [id]="fieldId"
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [attr.aria-describedby]="fieldId + '-help'"
+      class="form-input"
+      rows="3"
+    ></textarea>
+
+    <select
+      *ngIf="type === 'select'"
+      [id]="fieldId"
+      [formControl]="control"
+      class="form-input"
+    >
+      <option value="" disabled selected>{{ placeholder }}</option>
+      <option *ngFor="let option of options" [value]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="control.errors && control.touched" class="error-messages">
+    <small *ngIf="control.errors?.['required']" class="error-message">
+      Campo obrigatório
+    </small>
+    <small *ngIf="control.errors?.['email']" class="error-message">
+      E-mail inválido
+    </small>
+    <small *ngIf="control.errors?.['minlength']" class="error-message">
+      Mínimo de {{ control.errors["minlength"]?.requiredLength }} caracteres
+    </small>
+    <!-- Outras validações conforme necessário -->
+  </div>
+
+  <small *ngIf="helpText" [id]="fieldId + '-help'" class="help-text">
+    {{ helpText }}
+  </small>
+</div>

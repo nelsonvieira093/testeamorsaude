@@ -1,0 +1,165 @@
+<div class="clinic-details-container" *ngIf="clinicDetails; else loading">
+  <!-- Header com título e botão Excluir na mesma linha -->
+  <div class="header-row">
+    <h2>Editar Clínica</h2>
+    <button (click)="deleteClinic()" class="btn btn-danger" aria-label="Excluir clínica">
+      Excluir
+    </button>
+  </div>
+
+  <form #clinicForm="ngForm" (ngSubmit)="onSubmit(clinicForm)">
+    <!-- Linha 1: Razão Social, Nome Fantasia, CNPJ -->
+    <div class="detail-row">
+      <div class="detail-col">
+        <label for="corporateName">Razão Social</label>
+        <input
+          id="corporateName"
+          name="corporateName"
+          [(ngModel)]="clinicDetails.corporateName"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+
+      <div class="detail-col">
+        <label for="fantasyName">Nome Fantasia</label>
+        <input
+          id="fantasyName"
+          name="fantasyName"
+          [(ngModel)]="clinicDetails.fantasyName"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+
+      <div class="detail-col">
+        <label for="cnpj">CNPJ</label>
+        <input
+          id="cnpj"
+          name="cnpj"
+          [(ngModel)]="clinicDetails.cnpj"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <!-- Linha 2: Endereço, Cidade, Estado -->
+    <div class="detail-row">
+      <div class="detail-col address-col">
+        <label for="address">Endereço</label>
+        <input
+          id="address"
+          name="address"
+          [(ngModel)]="clinicDetails.address"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+
+      <div class="detail-col">
+        <label for="city">Cidade</label>
+        <input
+          id="city"
+          name="city"
+          [(ngModel)]="clinicDetails.city"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+
+      <div class="detail-col">
+        <label for="state">Estado</label>
+        <input
+          id="state"
+          name="state"
+          [(ngModel)]="clinicDetails.state"
+          required
+          class="form-input"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <!-- Linha 3: Regional, Data de Inauguração, Ativa -->
+    <div class="detail-row">
+      <div class="detail-col">
+        <label for="region">Regional</label>
+        <select
+          id="region"
+          name="region"
+          [(ngModel)]="clinicDetails.region"
+          required
+          class="form-select"
+        >
+          <option value="" disabled>Selecione uma regional</option>
+          <option value="Centro">Centro</option>
+          <option value="Zona Norte">Zona Norte</option>
+          <option value="Zona Sul">Zona Sul</option>
+          <option value="Zona Leste">Zona Leste</option>
+          <option value="Zona Oeste">Zona Oeste</option>
+        </select>
+      </div>
+
+      <div class="detail-col">
+        <label for="inaugurationDate">Data de Inauguração</label>
+        <input
+          id="inaugurationDate"
+          name="inaugurationDate"
+          [(ngModel)]="clinicDetails.inaugurationDate"
+          required
+          class="form-input"
+          type="date"
+          [ngModelOptions]="{standalone: true}"
+        />
+      </div>
+
+      <div class="detail-col status-col">
+        <label for="active">Ativa</label>
+        <input
+          id="active"
+          type="checkbox"
+          name="active"
+          [(ngModel)]="clinicDetails.active"
+          class="form-checkbox"
+        />
+      </div>
+    </div>
+
+    <!-- Linha 4: Especialidades Médicas (ocupa toda a largura) -->
+    <div class="detail-row specialties-col">
+      <label>Especialidades Médicas</label>
+      <div class="checkbox-list" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+        <label *ngFor="let specialty of specialties" style="display: flex; align-items: center; gap: 5px; font-weight: 400; font-size: 1rem; cursor: pointer;">
+          <input
+            type="checkbox"
+            [value]="specialty.name"
+            (change)="toggleSpecialty($event)"
+            [checked]="clinicDetails.medicalSpecialties.includes(specialty.name)"
+            class="form-checkbox"
+          />
+          {{ specialty.name }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Botões Salvar e Voltar alinhados à direita -->
+    <div class="buttons-row">
+      <button type="submit" [disabled]="clinicForm.invalid || isLoading" class="btn btn-primary">
+        Editar
+      </button>
+      <button type="button" (click)="goBack()" class="btn btn-secondary">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
+
+<ng-template #loading>
+  <p class="loading">Carregando dados da clínica para edição...</p>
+</ng-template>

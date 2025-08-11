@@ -1,0 +1,226 @@
+<!-- src/app/features/clinics/form/clinic-form.component.html -->
+<div class="clinic-form-container">
+  <h1 class="clinic-form-title">
+    {{ isEditMode ? "Editar Clínica" : "Nova Clínica" }}
+  </h1>
+
+  <app-loading *ngIf="isLoading" class="loading-container"></app-loading>
+
+  <form
+    *ngIf="!isLoading"
+    [formGroup]="clinicForm"
+    (ngSubmit)="onSubmit()"
+    class="clinic-form"
+  >
+    <div class="clinic-form-grid">
+      <!-- Razão Social -->
+      <div class="form-group">
+        <label for="corporateName" class="form-label">Razão Social</label>
+        <input
+          id="corporateName"
+          type="text"
+          formControlName="corporateName"
+          class="form-input"
+          [class.invalid]="
+            clinicForm.get('corporateName')?.invalid &&
+            clinicForm.get('corporateName')?.touched
+          "
+        />
+        <div
+          *ngIf="
+            clinicForm.get('corporateName')?.invalid &&
+            clinicForm.get('corporateName')?.touched
+          "
+          class="error-message"
+        >
+          Razão social é obrigatória
+        </div>
+      </div>
+
+      <!-- Nome Fantasia -->
+      <div class="form-group">
+        <label for="fantasyName" class="form-label">Nome Fantasia</label>
+        <input
+          id="fantasyName"
+          type="text"
+          formControlName="fantasyName"
+          class="form-input"
+          [class.invalid]="
+            clinicForm.get('fantasyName')?.invalid &&
+            clinicForm.get('fantasyName')?.touched
+          "
+        />
+        <div
+          *ngIf="
+            clinicForm.get('fantasyName')?.invalid &&
+            clinicForm.get('fantasyName')?.touched
+          "
+          class="error-message"
+        >
+          Nome fantasia é obrigatório
+        </div>
+      </div>
+
+      <!-- CNPJ -->
+      <div class="form-group">
+        <label for="cnpj" class="form-label">CNPJ</label>
+        <input
+          id="cnpj"
+          type="text"
+          formControlName="cnpj"
+          class="form-input"
+          [class.invalid]="
+            clinicForm.get('cnpj')?.invalid && clinicForm.get('cnpj')?.touched
+          "
+          placeholder="00.000.000/0000-00"
+        />
+        <div
+          *ngIf="
+            clinicForm.get('cnpj')?.invalid && clinicForm.get('cnpj')?.touched
+          "
+          class="error-message"
+        >
+          <div *ngIf="clinicForm.get('cnpj')?.errors?.['required']">
+            CNPJ é obrigatório
+          </div>
+          <div *ngIf="clinicForm.get('cnpj')?.errors?.['invalidCnpj']">
+            CNPJ inválido
+          </div>
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="form-group">
+        <label for="address" class="form-label">Endereço</label>
+        <input
+          id="address"
+          type="text"
+          formControlName="address"
+          class="form-input"
+          placeholder="Digite o endereço"
+        />
+      </div>
+
+      <!-- Cidade -->
+      <div class="form-group">
+        <label for="city" class="form-label">Cidade</label>
+        <input
+          id="city"
+          type="text"
+          formControlName="city"
+          class="form-input"
+          placeholder="Digite a cidade"
+        />
+      </div>
+
+      <!-- Estado -->
+      <div class="form-group">
+        <label for="state" class="form-label">Estado</label>
+        <input
+          id="state"
+          type="text"
+          formControlName="state"
+          class="form-input"
+          placeholder="Digite o estado"
+        />
+      </div>
+
+      <!-- Regional -->
+      <div class="form-group">
+        <label for="region" class="form-label">Regional</label>
+        <select
+          id="region"
+          formControlName="region"
+          class="form-select"
+          [class.invalid]="
+            clinicForm.get('region')?.invalid && clinicForm.get('region')?.touched
+          "
+        >
+          <option value="">Selecione uma regional</option>
+          <option *ngFor="let region of regions" [value]="region.id">
+            {{ region.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clinicForm.get('region')?.invalid && clinicForm.get('region')?.touched
+          "
+          class="error-message"
+        >
+          Regional é obrigatória
+        </div>
+      </div>
+
+      <!-- Data de Inauguração -->
+      <div class="form-group">
+        <label for="inaugurationDate" class="form-label">Data de Inauguração</label>
+        <input
+          id="inaugurationDate"
+          type="date"
+          formControlName="inaugurationDate"
+          class="form-input"
+          [class.invalid]="
+            clinicForm.get('inaugurationDate')?.invalid &&
+            clinicForm.get('inaugurationDate')?.touched
+          "
+        />
+        <div
+          *ngIf="
+            clinicForm.get('inaugurationDate')?.invalid &&
+            clinicForm.get('inaugurationDate')?.touched
+          "
+          class="error-message"
+        >
+          Data de inauguração é obrigatória
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="form-checkbox">
+        <input id="active" type="checkbox" formControlName="active" />
+        <label for="active" class="form-label">Ativa</label>
+      </div>
+    </div>
+
+    <!-- Especialidades Médicas -->
+    <div class="specialties-group">
+      <label class="form-label">Especialidades Médicas</label>
+      <div
+        *ngIf="
+          clinicForm.get('medicalSpecialties')?.invalid &&
+          clinicForm.get('medicalSpecialties')?.touched
+        "
+        class="error-message"
+      >
+        Selecione pelo menos 5 especialidades
+      </div>
+      <div class="specialties-grid">
+        <div *ngFor="let specialty of specialties" class="specialty-item">
+          <input
+            type="checkbox"
+            [id]="'specialty-' + specialty.id"
+            [value]="specialty.id"
+            (change)="onSpecialtyChange($event, specialty.id)"
+            [checked]="clinicForm.value.medicalSpecialties?.includes(specialty.id)"
+          />
+          <label [for]="'specialty-' + specialty.id" class="form-label">
+            {{ specialty.name }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" (click)="navigateToClinics()" class="btn btn-cancel">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="clinicForm.invalid || isLoading"
+        class="btn btn-submit"
+      >
+        {{ isEditMode ? "Atualizar" : "Salvar" }}
+      </button>
+    </div>
+  </form>
+</div>

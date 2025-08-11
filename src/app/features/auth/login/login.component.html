@@ -1,0 +1,92 @@
+<!-- src/app/features/auth/login/login.component.html -->
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-section">
+      <!-- Correção no caminho da logo (adicione a extensão .jpg) -->
+      <!--<img src="../assets/logo.jpg" 
+     alt="Logo Amor Saúde" class="logo">-->
+      <img src="assets/logo.jpg" alt="Logo Amor Saúde" class="logo" />
+      <h2>Acesse sua conta</h2>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <!-- Campo Email -->
+        <div class="input-field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            [class.invalid]="
+              loginForm.get('email')?.invalid &&
+              (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+            "
+            placeholder="Digite seu email"
+          />
+          <div
+            class="error-msg"
+            *ngIf="
+              loginForm.get('email')?.invalid &&
+              (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+            "
+          >
+            <div *ngIf="loginForm.get('email')?.errors?.['required']">
+              Email é obrigatório
+            </div>
+            <div *ngIf="loginForm.get('email')?.errors?.['email']">
+              Email inválido
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="input-field">
+          <label for="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            [class.invalid]="
+              loginForm.get('password')?.invalid &&
+              (loginForm.get('password')?.dirty ||
+                loginForm.get('password')?.touched)
+            "
+            placeholder="Digite sua senha"
+          />
+          <div
+            class="error-msg"
+            *ngIf="
+              loginForm.get('password')?.invalid &&
+              (loginForm.get('password')?.dirty ||
+                loginForm.get('password')?.touched)
+            "
+          >
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">
+              Senha é obrigatória
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensagem de erro -->
+      <div class="error-box" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <!-- Botão de Submit -->
+      <button
+        type="submit"
+        [disabled]="loading || loginForm.invalid"
+        class="submit-btn"
+      >
+        <span *ngIf="!loading">Entrar</span>
+        <span *ngIf="loading" class="loading">
+          <span class="spinner"></span>
+          Carregando...
+        </span>
+      </button>
+    </form>
+  </div>
+</div>

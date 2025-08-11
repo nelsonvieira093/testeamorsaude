@@ -1,0 +1,68 @@
+<div class="clinic-details-container" *ngIf="clinicDetails; else loading">
+  <!-- Container topo: título e botão editar na mesma linha -->
+  <div class="header-row">
+    <h2>Visualizar Clínica</h2>
+    <button (click)="editClinic()" class="btn btn-primary" aria-label="Editar clínica">
+      Editar
+    </button>
+  </div>
+
+  <!-- Linha 1 -->
+  <div class="detail-row">
+    <div class="detail-col">
+      <label>Nome Fantasia:</label>
+      <span>{{ clinicDetails.fantasyName }}</span>
+    </div>
+
+    <div class="detail-col">
+      <label>Razão Social:</label>
+      <span>{{ clinicDetails.corporateName }}</span>
+    </div>
+
+    <div class="detail-col">
+      <label>CNPJ:</label>
+      <span>{{ clinicDetails.cnpj }}</span>
+    </div>
+  </div>
+
+  <!-- Linha 2 -->
+  <div class="detail-row">
+    <div class="detail-col specialties-col">
+      <label>Especialidades:</label>
+      <span>
+        {{ clinicDetails.medicalSpecialties.join(', ') }}
+      </span>
+    </div>
+
+    <div class="detail-col address-col">
+      <label>Endereço:</label>
+      <span>{{ clinicDetails.address }} - {{ clinicDetails.city }}, {{ clinicDetails.state }}</span>
+    </div>
+
+    <div class="detail-col">
+      <label>Data de Inauguração:</label>
+      <span>{{ clinicDetails.inaugurationDate | date: 'dd/MM/yyyy' }}</span>
+    </div>
+  </div>
+
+  <!-- Linha 3 -->
+  <div class="detail-row status-row">
+    <div class="detail-col status-col">
+      <label>Status:</label>
+      <span class="status-text" [class.active]="clinicDetails.active" [class.inactive]="!clinicDetails.active">
+        {{ clinicDetails.active ? 'Ativa' : 'Inativa' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Botão Voltar alinhado à direita em linha própria -->
+  <div class="back-button-row">
+    <button (click)="goBack()" class="btn btn-secondary" aria-label="Voltar para a lista de clínicas">
+      Voltar
+    </button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Carregando detalhes da clínica...</p>
+</ng-template>

@@ -1,12 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  // Não é necessário importar RouterOutlet aqui
+  // imports: [RouterOutlet], 
+  templateUrl: './app.html', 
+  styleUrls: ['./app.css'] // Alterado para styleUrls
 })
 export class App {
   protected readonly title = signal('amorsaude-frontend');
 }
+
+

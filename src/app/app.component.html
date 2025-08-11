@@ -1,0 +1,33 @@
+<!-- src/app/app.component.html -->
+<div class="dev-nav">
+  <h3>Menu de Desenvolvimento</h3>
+  <a routerLink="/login">Login</a>
+  <a routerLink="/clinics">Clínicas</a>
+  <a routerLink="/table-example">Tabela</a>
+  <a routerLink="/form-example">Adicionar Clínica</a>
+</div>
+
+<router-outlet></router-outlet>
+
+<style>
+  .dev-nav {
+    position: inline;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+  .dev-nav a {
+    display: flexbox;
+    margin: 5px 0;
+    color: blue;
+    text-decoration: none;
+  }
+</style>
